@@ -363,6 +363,10 @@ class WebApiMainRoutesSpec extends WebApiSpec {
         """.stripMargin
       Post("/contexts/custom-ctx?num-cpu-cores=2&override_me=2", config) ~> sealRoute(routes) ~> check {
         status should be (OK)
+        val config = ConfigFactory.parseString(responseAs[String])
+        config.getInt("test") should be(1)
+        config.getInt("num-cpu-cores") should be(2)
+        config.getInt("override_me") should be(3)
       }
     }
   }

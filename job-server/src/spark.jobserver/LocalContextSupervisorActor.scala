@@ -28,6 +28,8 @@ object ContextSupervisor {
 
   // Errors/Responses
   case object ContextInitialized
+  // currently just for testing purposes:
+  case class ContextInitializedWithConfig(contextConfig: Config)
   case class ContextInitError(t: Throwable)
   case object ContextAlreadyExists
   case object NoSuchContext

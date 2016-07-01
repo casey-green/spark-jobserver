@@ -279,6 +279,10 @@ class WebApi(system: ActorSystem,
                 val future = (supervisor ? AddContext(cName, config))(contextTimeout.seconds)
                 respondWithMediaType(MediaTypes.`application/json`) { ctx =>
                   future.map {
+                    case ContextInitializedWithConfig(c) =>
+                      val renderOptions = ConfigRenderOptions.defaults()
+                        .setComments(false).setOriginComments(false)
+                      ctx.complete(c.root().render(renderOptions))
                     case ContextInitialized   => ctx.complete(StatusCodes.OK)
                     case ContextAlreadyExists => badRequest(ctx, "context " + contextName + " exists")
                     case ContextInitError(e)  => ctx.complete(500, errMap(e, "CONTEXT INIT ERROR"))
